@@ -12,4 +12,6 @@ public class Memo {
 
     private String title;
     private String content;
+
+    private String userId; // Long → String に変更
 }
