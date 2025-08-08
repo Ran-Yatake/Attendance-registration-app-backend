@@ -119,4 +119,46 @@ public class AttendanceController {
         
         return ResponseEntity.ok(attendanceRepository.save(attendance));
     }
+
+    // 勤怠記録編集（PUT）
+    @PutMapping("/{id}")
+    public ResponseEntity<Attendance> updateAttendance(@PathVariable Long id, @RequestBody Attendance updatedAttendance) {
+        Optional<Attendance> attendanceOpt = attendanceRepository.findById(id);
+        
+        if (attendanceOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        Attendance attendance = attendanceOpt.get();
+        
+        // 更新可能なフィールドのみ更新
+        if (updatedAttendance.getStartTime() != null) {
+            attendance.setStartTime(updatedAttendance.getStartTime());
+        }
+        if (updatedAttendance.getBreakStartTime() != null) {
+            attendance.setBreakStartTime(updatedAttendance.getBreakStartTime());
+        }
+        if (updatedAttendance.getBreakEndTime() != null) {
+            attendance.setBreakEndTime(updatedAttendance.getBreakEndTime());
+        }
+        if (updatedAttendance.getEndTime() != null) {
+            attendance.setEndTime(updatedAttendance.getEndTime());
+        }
+        if (updatedAttendance.getStatus() != null) {
+            attendance.setStatus(updatedAttendance.getStatus());
+        }
+        
+        return ResponseEntity.ok(attendanceRepository.save(attendance));
+    }
+
+    // 勤怠記録削除（DELETE）
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAttendance(@PathVariable Long id) {
+        if (!attendanceRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        attendanceRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
