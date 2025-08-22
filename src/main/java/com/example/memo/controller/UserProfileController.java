@@ -10,6 +10,12 @@ import java.util.Optional;
 @RequestMapping("/api/user-profile")
 @CrossOrigin(origins = "*")
 public class UserProfileController {
+    // 自分のプロフィール取得（簡易版）
+    @GetMapping("/me")
+    public ResponseEntity<UserProfile> getMyProfile(@RequestParam String userId) {
+        Optional<UserProfile> profile = userProfileRepository.findByUserId(userId);
+        return profile.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
     private final UserProfileRepository userProfileRepository;
 
     public UserProfileController(UserProfileRepository userProfileRepository) {

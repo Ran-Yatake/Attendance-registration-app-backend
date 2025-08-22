@@ -66,6 +66,9 @@ public class UserProfile {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "admin", nullable = false)
+    private boolean admin = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
