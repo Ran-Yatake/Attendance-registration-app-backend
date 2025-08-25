@@ -107,4 +107,40 @@ public class ExpenseReportController {
         
         return ResponseEntity.ok(result);
     }
+
+    // 管理者用：全ユーザーの申請中経費申請一覧取得
+    @GetMapping("/admin/pending")
+    public List<ExpenseReport> getAllPendingExpenseReports() {
+        return expenseReportRepository.findByStatusOrderByExpenseDateDesc("PENDING");
+    }
+
+    // 管理者用：経費申請承認
+    @PutMapping("/admin/approve/{id}")
+    public ResponseEntity<ExpenseReport> approveExpenseReport(@PathVariable Long id) {
+        Optional<ExpenseReport> expenseReportOpt = expenseReportRepository.findById(id);
+        
+        if (expenseReportOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        ExpenseReport expenseReport = expenseReportOpt.get();
+        expenseReport.setStatus("APPROVED");
+        
+        return ResponseEntity.ok(expenseReportRepository.save(expenseReport));
+    }
+
+    // 管理者用：経費申請却下
+    @PutMapping("/admin/reject/{id}")
+    public ResponseEntity<ExpenseReport> rejectExpenseReport(@PathVariable Long id) {
+        Optional<ExpenseReport> expenseReportOpt = expenseReportRepository.findById(id);
+        
+        if (expenseReportOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        ExpenseReport expenseReport = expenseReportOpt.get();
+        expenseReport.setStatus("REJECTED");
+        
+        return ResponseEntity.ok(expenseReportRepository.save(expenseReport));
+    }
 }

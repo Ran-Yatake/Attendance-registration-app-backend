@@ -15,6 +15,9 @@ public interface ExpenseReportRepository extends JpaRepository<ExpenseReport, Lo
     
     List<ExpenseReport> findByUserIdAndExpenseDateBetweenOrderByExpenseDateDesc(String userId, LocalDate startDate, LocalDate endDate);
     
+    // 管理者用：ステータス別全ユーザーの経費申請取得
+    List<ExpenseReport> findByStatusOrderByExpenseDateDesc(String status);
+    
     @Query("SELECT SUM(e.amount) FROM ExpenseReport e WHERE e.userId = :userId AND e.status = :status")
     Integer getTotalAmountByUserIdAndStatus(@Param("userId") String userId, @Param("status") String status);
     
